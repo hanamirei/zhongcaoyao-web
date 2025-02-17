@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杏林春暖 - 中医药数字典藏</title>
+    <!-- 引入字体 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css">
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'LXGW WenKai Screen', sans-serif;
+        }
+
+        /* 整体背景 */
+        body {
+            background: linear-gradient(135deg, #f3e9d2 0%, #d8c3a5 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 水墨背景装饰 */
+        .ink-bg {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            background: url('./assets/images/ink-texture.png') center/cover;
+        }
+
+        /* 头部样式 */
+        header {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .site-title {
+            font-size: 3.5rem;
+            color: #5a3921;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .site-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: #9e6d4d;
+        }
+
+        /* 主视觉区域 */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .dynamic-text {
+            font-size: 2.5rem;
+            color: #4a3120;
+            margin-bottom: 2rem;
+            min-height: 4rem;
+            border-right: 2px solid #4a3120;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        /* 功能卡片 */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(158, 109, 77, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            animation: shine 1.5s;
+        }
+
+        /* 动画定义 */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #4a3120 }
+        }
+
+        @keyframes shine {
+            0% { left: -50% }
+            100% { left: 150% }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 2.5rem;
+            }
+            
+            .dynamic-text {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ink-bg"></div>
+    
+    <header>
+        <h1 class="site-title">杏林春暖</h1>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="dynamic-text" id="dynamicText"></div>
+        </section>
+
+        <div class="card-container">
+            <div class="card">
+                <h2>AR本草互动</h2>
+                <p>扫实体绘本，观药材生长</p>
+            </div>
+            <div class="card">
+                <h2>道地药材地图</h2>
+                <p>览九州本草，知地理分布</p>
+            </div>
+            <div class="card">
+                <h2>数字药材库</h2>
+                <p>查百草性状，学炮制工艺</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 动态文字效果
+        const texts = ["以数字传承千年本草", "用科技焕新中医智慧", "让文化浸润现代生活"];
+        let count = 0;
+        let index = 0;
+        let currentText = '';
+        let letter = '';
+
+        (function type() {
+            if(count === texts.length) count = 0;
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+            
+            document.getElementById('dynamicText').textContent = letter;
+            if(letter.length === currentText.length){
+                count++;
+                index = 0;
+                setTimeout(type, 2000);
+            } else {
+                setTimeout(type, 150);
+            }
+        })();
+
+        // 卡片入场动画
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 300 * index);
+        });
+    </script>
+</body>
+</html>
